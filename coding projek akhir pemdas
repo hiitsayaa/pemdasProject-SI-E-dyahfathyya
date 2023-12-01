@@ -1,0 +1,223 @@
+import processing.core.PApplet;
+
+public class entahlah extends PApplet {
+    float sunX = 50;
+    float sunY = 95;
+    float sunSize = 50;
+    boolean isNight = false;
+    float waveY = 0;
+    float cloudXr = 200;
+    float cloudYr = 95;
+    float cloudXl = -125;
+    float cloudYl = 96;
+    float cloudSpeed = 1;
+
+
+    public static void main(String[] args) {
+        PApplet.runSketch(new String[]{"Beach Panorama"}, new entahlah());
+    }
+
+    @Override
+    public void settings() {
+        size(1366, 768);
+    }
+
+    //    berisi codingan untuk menjalankan beberapa objek
+    @Override
+    public void draw() {
+//        codingan untuk menampilkan matahari agar melayang dan berganti di waktu tertentu
+        if (sunX <= width / 4) {
+            //matahari 1/4 pertama
+            background(135, 206, 250);
+            stroke(255, 255, 0);
+            drawSun(color(255, 255, 0));
+        } else if (sunX <= width / 2) {
+            //matahari 1/4 kedua
+            background(255, 165, 0);
+            stroke(255, 255, 0);
+            drawSun(color(255, 255, 0));
+        } else if (sunX <= 3 * width / 4) {
+            //matahari 1/4 ketiga
+            background(128);
+            stroke(255, 255, 255);
+            drawMoon();
+            drawRain();
+        } else {
+            //matahari 1/4 terakhir
+            background(25, 25, 112);
+            stroke(255, 255, 255);
+            drawSun(color(25, 25, 112));
+            drawMoon();
+            isNight = true;
+        }
+        // pergeseran matahari untuk membuat efek matahari bergerak
+        sunX += 1;
+
+        // codingan agar matahari yang dibuat looping
+        if (sunX > width + 200) {
+            sunX = 0;
+            isNight = false;
+        }
+//        codingan untuk menampilkan efek ombak pada laut
+        float cornerRadius = 20;
+        // buat wave sumber dari processing library
+        drawSea(0, 400, 1600, 150, color(0, 128, 129));
+        beginShape();
+        float waveX = 0;
+        for (float x = 0; x <= width; x += 10) {
+            float y = map(noise(waveX, waveY), 0, 1, 185, 215);
+            vertex(x, y);
+            waveX += 0.05;
+        }
+        waveY += 0.01;
+        vertex(width, height);
+        vertex(0, height);
+        endShape(CLOSE);
+
+//        codingan untuk menampilkan awan di langit
+        drawCloud(cloudXr, cloudYr);
+        drawCloud(cloudXl, cloudYl);
+
+        // perbarui posisi awan
+        cloudXr += cloudSpeed;
+        cloudXl += cloudSpeed;
+        // buat awan looping
+        if (cloudXr > width) {
+            cloudXr = -40;
+        }
+        if (cloudXl > width) {
+            cloudXl = -40;
+        }
+
+//        membuat codingan untuk dinding tembok kereta api
+        fill(211, 211, 211);
+        stroke(211, 211, 211);
+        // x,y, lebar ke samping, panjang ke atas
+        rect(240, 51, 190, 270);
+        rect(930, 51, 185, 270);
+        rect(0, 0, 1350, 51);
+
+        // codingan untuk membuat tampilan jendela di bagian kiri
+        noFill();
+        stroke(0, 0, 0);
+        rect(-30, 50, 270, 270);
+        // Pasir pantai kiri
+        fill(238, 221, 130);
+        rect(-30, 250, 270, 70);
+
+        // codingan untuk membuat tampilan jendela di bagian tengah
+        noFill();
+        stroke(0, 0, 0);
+        rect(430, 50, 500, 270);
+        // Pasir pantai kiri
+        fill(238, 221, 130);
+        rect(430, 250, 500, 70);
+
+        // codingan untuk membuat tampilan jendela di bagian kiri
+        noFill();
+        stroke(0, 0, 0);
+        rect(1115, 50, 500, 270);
+        // Pasir pantai kanan
+        fill(238, 221, 130);
+        rect(1115, 250, 500, 70);
+
+//        codingan untuk menampilkan codingan tembok kereta
+        float cornerRadius2 = 40;
+        // koor x, koor y, length, height
+        fill(211, 211, 211);
+        stroke(211, 211, 211);
+        rect(0, 322, 1350, 700);
+
+        // meja 1
+        fill(150, 75, 0);
+        stroke(0, 0, 0);
+        rect(0, 450, 20, 170, cornerRadius2); // kaki meja
+        rect(-40, 430, 150, 30, cornerRadius2); // mejanya
+
+        // kursi 1
+        fill(245, 245, 220);
+        stroke(0, 0, 0);
+        rect(250, 300, 80, 300, cornerRadius2); // badan kursi
+        rect(125, 540, 200, 80, cornerRadius2); // dudukan
+        fill(51, 36, 33);
+        rect(160, 460, 150, 20, cornerRadius2); // tangan
+
+        // kursi 2
+        fill(245, 245, 220);
+        stroke(0, 0, 0);
+        rect(350, 300, 80, 300, cornerRadius2); // badan kursi
+        rect(355, 540, 200, 80, cornerRadius2); // dudukan
+        fill(51, 36, 33);
+        rect(375, 460, 150, 20, cornerRadius2); // tangan
+
+        // meja 2
+        fill(150, 75, 0);
+        stroke(0, 0, 0);
+        rect(670, 450, 20, 170, cornerRadius2); // kaki meja
+        rect(590, 430, 190, 30, cornerRadius2); // mejanya
+
+        // kursi 3
+        fill(245, 245, 220);
+        stroke(0, 0, 0);
+        rect(930, 300, 80, 300, cornerRadius2); // badan kursi
+        rect(805, 540, 200, 80, cornerRadius2); // dudukan
+        fill(51, 36, 33);
+        rect(830, 460, 150, 20, cornerRadius2); // tangan
+
+        // kursi 4
+        fill(245, 245, 220);
+        stroke(0, 0, 0);
+        rect(1030, 300, 80, 300, cornerRadius2); // badan kursi
+        rect(1040, 540, 200, 80, cornerRadius2); // dudukan
+        fill(51, 36, 33);
+        rect(1070, 460, 150, 20, cornerRadius2); // tangan
+
+
+        // meja 3
+        fill(150, 75, 0);
+        stroke(0, 0, 0);
+        rect(1350, 450, 20, 170, cornerRadius2); // kaki meja
+        rect(1270, 430, 190, 30, cornerRadius2); // mejanya
+    }
+
+    //    method untuk membuat laut
+    void drawSea(float x, float y, float width, float height, int seaColor) {
+        stroke(0, 128, 129);
+        fill(seaColor);
+        rect(x, y, width, height);
+    }
+
+    //    method untuk membuat matahari
+    void drawSun(int color) {
+        fill(color);
+        ellipse(sunX, sunY, sunSize, sunSize);
+    }
+
+    //   method untuk membuat bulan
+    void drawMoon() {
+        fill(255);
+        ellipse(sunX, sunY, sunSize, sunSize);
+    }
+
+    //    method untuk membuat efek hujan
+    void drawRain() {
+        for (int i = 0; i < 20; i++) {
+            float x = random(width);
+            float y = random(height);
+            strokeWeight(2);
+            stroke(173, 216, 230);
+            line(x, y, x, y + 20);
+        }
+    }
+
+    //    method untuk membuat awan
+    void drawCloud(float x, float y) {
+        stroke(255);
+        fill(255);
+        ellipse(x, y + 10, 40, 40);
+        ellipse(x + 20, y + 10, 40, 40);
+        ellipse(x + 40, y + 10, 40, 40);
+        ellipse(x + 10, y - 15, 40, 40);
+        ellipse(x + 30, y - 15, 40, 40);
+    }
+}
